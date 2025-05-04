@@ -1,0 +1,16 @@
+INSERT INTO products (id, title, price, stock) VALUES
+(1, 'Laptop', 699.99, 10),
+(2, 'Smartphone', 499.99, 25),
+(3, 'Tablet', 299.99, 15),
+(4, 'Monitor', 199.99, 8),
+(5, 'Keyboard', 49.99, 30),
+(6, 'Mouse', 29.99, 40),
+(7, 'Printer', 150.00, 5),
+(8, 'Webcam', 89.99, 20),
+(9, 'Headphones', 79.99, 18),
+(10, 'Desk Lamp', 25.50, 12),
+(11, 'USB-C Cable', 12.99, 100),
+(12, 'External HDD', 99.99, 14),
+(13, 'Power Bank', 39.99, 22),
+(14, 'Bluetooth Speaker', 59.99, 16),
+(15, 'Router', 129.00, 9);
