@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Api-Gateway
+
+#api gateway config
+cloud:
+  gateway:
+    routes:
+      - id: InventoryService
+        uri: lb://INVENTORYSERVICE
+        predicates:
+          - Path=/inventory/products/**
+
+      - id: OrderService
+        uri: lb://ORDERSERVICE
+        predicates:
+          - Path=/orders/core/**
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
