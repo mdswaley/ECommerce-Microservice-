@@ -2,6 +2,7 @@ package com.example.inventoryservice.Controller;
 
 import com.example.inventoryservice.DTO.ProductDTO;
 import com.example.inventoryservice.Service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
@@ -26,10 +27,11 @@ public class ProductController {
     private final RestClient restClient;
 
     @GetMapping("/fetchOrders")
-    public String fetchOrders(){
-        log.info("before order");
+    public String fetchOrders(HttpServletRequest httpServletRequest){
+        log.info(httpServletRequest.getHeader("x-custom-header"));
         ServiceInstance serviceInstance = discoveryClient.getInstances("order-service")
                 .stream().findFirst().orElse(null);
+
         return restClient.get()
                 .uri(serviceInstance.getUri()+"/orders/core/helloOrders")
                 .retrieve()
