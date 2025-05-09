@@ -1,8 +1,11 @@
 package com.example.orderservice.Service;
 
 import com.example.orderservice.DTO.OrderRequestDTO;
+import com.example.orderservice.Entity.OrderItemsEntity;
 import com.example.orderservice.Entity.OrdersEntity;
+import com.example.orderservice.Entity.OrdersStatus;
 import com.example.orderservice.Repository.OrdersRepo;
+import com.example.orderservice.clients.InventoryOpenFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,6 +22,7 @@ public class OrdersService {
 
     private final OrdersRepo ordersRepo;
     private final ModelMapper modelMapper;
+    private final InventoryOpenFeignClient inventoryOpenFeignClient;
 
     public List<OrderRequestDTO> getAllOrders(){
         log.info("fetching all orders");
@@ -38,4 +42,17 @@ public class OrdersService {
     }
 
 
+    public OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO) {
+        double total = inventoryOpenFeignClient.reduceStocks(orderRequestDTO);
+
+        OrdersEntity ordersEntity = modelMapper.map(orderRequestDTO,OrdersEntity.class);
+        for (OrderItemsEntity orderItemsEntity:ordersEntity.getItems()){
+            orderItemsEntity.setOrders(ordersEntity);
+        }
+
+        ordersEntity.setTotal(total);
+        ordersEntity.setOrdersStatus(OrdersStatus.CONFIRM);
+
+        return modelMapper.map(ordersRepo.save(ordersEntity), OrderRequestDTO.class);
+    }
 }
