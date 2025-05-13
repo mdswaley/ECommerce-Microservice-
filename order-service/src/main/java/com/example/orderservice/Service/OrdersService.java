@@ -45,6 +45,7 @@ public class OrdersService {
 
     @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO) {
+        log.info("Calling the create order method.");
         double total = inventoryOpenFeignClient.reduceStocks(orderRequestDTO);
 
         OrdersEntity ordersEntity = modelMapper.map(orderRequestDTO,OrdersEntity.class);

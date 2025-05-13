@@ -1,0 +1,10 @@
+resilience4j:
+  retry:
+    instance:
+      inventoryRetry:
+        maxRetryAttempts: 4
+        waitDuration: 20s
+
+
+# max retry :- maximum time try to get data from trigger api but if not then fail.
+# waitDuration :- wait for given time after that again call that api.
