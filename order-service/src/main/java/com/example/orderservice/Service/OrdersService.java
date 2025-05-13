@@ -6,6 +6,7 @@ import com.example.orderservice.Entity.OrdersEntity;
 import com.example.orderservice.Entity.OrdersStatus;
 import com.example.orderservice.Repository.OrdersRepo;
 import com.example.orderservice.clients.InventoryOpenFeignClient;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,7 @@ public class OrdersService {
 
 
     @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
+    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO) {
         log.info("Calling the create order method.");
         double total = inventoryOpenFeignClient.reduceStocks(orderRequestDTO);

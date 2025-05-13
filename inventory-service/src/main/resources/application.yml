@@ -4,6 +4,13 @@ resilience4j:
       inventoryRetry:
         maxRetryAttempts: 4
         waitDuration: 20s
+  ratelimiter:
+    instance:
+      inventoryRateLimiter:
+        limiteForPeriod: 1
+        limiteRefreshPeriod: 5s
+        timeoutDuration: 2s
+
 
 
 # max retry :- maximum time try to get data from trigger api but if not then fail.
