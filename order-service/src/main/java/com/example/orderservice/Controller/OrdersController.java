@@ -40,4 +40,15 @@ public class OrdersController {
         return ResponseEntity.ok(orderRequestDTOS);
     }
 
+    @PutMapping("/cancel/{orderId}")
+    ResponseEntity<String> cancelOrderInOrderService(@PathVariable("orderId") Long orderId){
+        boolean isCancel = ordersService.cancelOrder(orderId);
+
+        if (isCancel) {
+            return ResponseEntity.ok("Order cancelled successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Order already cancelled or not found.");
+        }
+    }
+
 }

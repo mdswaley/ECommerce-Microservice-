@@ -1,43 +1,45 @@
 # actuator config
 management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
     health:
-      circuitbreakers:
-       enabled: true
-    endpoints:
-      web:
-        exposure:
-          include: "*"
-    endpoint:
-      health:
-        show-details: always
+      show-details: always
 
 
 resilience4j:
   retry:
-    instance:
+    configs:
+      default:
+        maxRetryAttempts: 3
+        waitDuration: 100ms
+    instances:
       inventoryRetry:
-        maxRetryAttempts: 4
-        waitDuration: 20s
-
+        baseConfig: default
+        waitDuration: 200ms
   ratelimiter:
-    instance:
+    instances:
       inventoryRateLimiter:
-        limiteForPeriod: 1
-        limiteRefreshPeriod: 5s
-        timeoutDuration: 2s
+        limitRefreshPeriod: 1s
+        limitForPeriod: 100
+        timeoutDuration: 10ms
 
   circuitbreaker:
     instances:
-      inventory FeignClient:
-        register-health-indicator: true # Enables health indicator for this circuit breaker in Actuator (/actuator/health)
-        sliding-window-size: 10         # Number of calls used to calculate the failure rate (only the latest 10 calls are considered)
-        failure-rate-threshold: 50      # If 50% or more of the calls in the sliding window fail, the circuit breaker opens
-        wait-duration-in-open-state: 10000 # Time (in milliseconds) the circuit breaker stays open before transitioning to half-open state (10 seconds)
-        permitted-number-of-calls-in-half-open-state: 5 # Number of trial calls allowed when the circuit breaker is in half-open state
-        sliding-window-type: COUNT_BASED # Uses count-based sliding window (alternative is TIME_BASED)
-        minimum-number-of-calls: 5       # Circuit breaker will only calculate failure rate after at least 5 calls
-        automatic-transition-from-open-to-half-open-enabled: true # Automatically moves to half-open state after the wait duration elapses
-
+      inventoryCircuitBreaker:
+        registerHealthIndicator: true  # Expose circuit breaker health via the actuator
+        slidingWindowSize: 10          # Size of the sliding window for call recording
+        slidingWindowType: COUNT_BASED # Use count-based sliding window
+        minimumNumberOfCalls: 10       # Minimum number of calls before calculating failure rate
+        failureRateThreshold: 50       # If 50% (5 out of 10) calls fail, the circuit goes to OPEN state
+        waitDurationInOpenState: 1s   # Time the circuit stays OPEN before moving to HALF_OPEN
+        permittedNumberOfCallsInHalfOpenState: 3  # Number of test calls in HALF_OPEN state
+        eventConsumerBufferSize: 10    # Buffer size for event logs
 
 
 

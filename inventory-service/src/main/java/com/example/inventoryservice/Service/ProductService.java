@@ -5,6 +5,7 @@ import com.example.inventoryservice.DTO.OrderRequestItemDto;
 import com.example.inventoryservice.DTO.ProductDTO;
 import com.example.inventoryservice.Entity.ProductEntity;
 import com.example.inventoryservice.Repository.ProductRepo;
+import com.example.inventoryservice.clients.OrderFeignClients;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,6 +23,7 @@ public class ProductService {
 
     private final ProductRepo productRepo;
     private final ModelMapper modelMapper;
+    private final OrderFeignClients orderFeignClients;
 
     public List<ProductDTO> getAllInventory(){
         log.info("fetching all inventory items.");
@@ -58,6 +61,34 @@ public class ProductService {
             productRepo.save(productEntity);
             total += productEntity.getPrice() * quantity;
         }
+
+        return total;
+    }
+
+    @Transactional
+    public Double cancelOrder(Long orderId) {
+        OrderRequestDto orderRequestDto = orderFeignClients.getOrdersById(orderId);
+
+        if (Objects.equals(orderRequestDto.getStatus(), "CANCELLED")) {
+            throw new RuntimeException("Order is already cancelled.");
+        }
+
+        double total = 0.0;
+
+        for (OrderRequestItemDto itemDto : orderRequestDto.getItems()){
+            ProductEntity productEntity = productRepo.findById(itemDto.getProductId())
+                    .orElseThrow(()->new RuntimeException("product not found with id "+itemDto.getProductId()));
+            productEntity.setStock(productEntity.getStock() + itemDto.getQuantity());
+
+            productRepo.save(productEntity);
+
+            log.info("After restocking: Product ID: {}, New Stock: {}", itemDto.getProductId(), productEntity.getStock());
+
+
+            total += productEntity.getPrice() * itemDto.getQuantity();
+        }
+
+        orderFeignClients.cancelOrderInOrderService(orderId);
 
         return total;
     }

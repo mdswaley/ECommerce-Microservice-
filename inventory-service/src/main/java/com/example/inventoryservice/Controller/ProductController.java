@@ -57,5 +57,10 @@ public class ProductController {
         return ResponseEntity.ok(productService.reduceStock(orderRequestDto));
     }
 
+    @PostMapping("/cancel-order/{order_id}")
+    public ResponseEntity<Double> cancelOrder(@PathVariable Long order_id){
+        return ResponseEntity.ok(productService.cancelOrder(order_id));
+    }
+
 
 }

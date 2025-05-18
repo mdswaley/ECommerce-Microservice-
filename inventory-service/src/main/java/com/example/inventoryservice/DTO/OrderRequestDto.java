@@ -7,4 +7,5 @@ import java.util.List;
 @Data
 public class OrderRequestDto {
     private List<OrderRequestItemDto> items;
+    private String status;
 }

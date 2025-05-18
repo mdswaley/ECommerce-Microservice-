@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.orderservice.Entity.OrdersStatus.CANCELLED;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class OrdersService {
 
 //    @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
     @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback")
-    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
+//    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO orderRequestDTO) {
         log.info("Calling the create order method.");
         double total = inventoryOpenFeignClient.reduceStocks(orderRequestDTO);
@@ -66,5 +68,18 @@ public class OrdersService {
     public OrderRequestDTO createOrderFallback(OrderRequestDTO orderRequestDTO, Throwable throwable) {
         log.error("fallback occurred due to : {}", throwable.getMessage());
         return new OrderRequestDTO();
+    }
+
+    public boolean cancelOrder(Long orderId) {
+        OrdersEntity ordersEntity = ordersRepo.findById(orderId)
+                .orElseThrow(()->new RuntimeException("Order with id is not found :"+orderId));
+
+        if (ordersEntity.getOrdersStatus() == CANCELLED) {
+            return false;
+        }
+
+        ordersEntity.setOrdersStatus(CANCELLED);
+        ordersRepo.save(ordersEntity);
+        return true;
     }
 }
