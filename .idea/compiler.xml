@@ -20,6 +20,15 @@
         <module name="order-service" />
         <module name="InventoryService" />
       </profile>
+      <profile name="Annotation profile for shipping-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="shipping-service" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="OrderService" target="17" />
@@ -32,6 +41,7 @@
       <module name="InventoryService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="order-service" options="-parameters" />
+      <module name="shipping-service" options="-parameters" />
     </option>
   </component>
 </project>

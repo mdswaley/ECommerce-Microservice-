@@ -51,4 +51,11 @@ public class OrdersController {
         }
     }
 
+    @PostMapping("/place-order/{orderId}")
+    public ResponseEntity<String> placeOrder(@PathVariable Long orderId) {
+        String response = ordersService.placeOrder(orderId);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

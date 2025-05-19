@@ -1,5 +1,5 @@
 package com.example.orderservice.Entity;
 
 public enum OrdersStatus {
-    CONFIRM, CANCELLED, PENDING
+    CONFIRM, PLACED, CANCELLED, PENDING
 }

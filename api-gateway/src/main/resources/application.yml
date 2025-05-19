@@ -22,6 +22,14 @@ spring:
             - StripPrefix=2
             - AddRequestHeader=X-Custom-Header, MD
 
+        - id: shipping-service
+          uri: lb://SHIPPING-SERVICE
+          predicates:
+            - Path=/api/v1/shipping/**
+          filters:
+            - StripPrefix=2
+
+
 
 eureka:
   client:
