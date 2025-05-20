@@ -1,9 +1,7 @@
 package com.example.orderservice.Controller;
 
 import com.example.orderservice.DTO.OrderRequestDTO;
-import com.example.orderservice.DTO.OrderRequestItemDTO;
 import com.example.orderservice.Service.OrdersService;
-import com.example.orderservice.clients.InventoryOpenFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

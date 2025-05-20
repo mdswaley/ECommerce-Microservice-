@@ -1,6 +1,5 @@
 package com.example.orderservice.DTO;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 
 @Data

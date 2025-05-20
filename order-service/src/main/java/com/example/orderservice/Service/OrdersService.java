@@ -1,7 +1,6 @@
 package com.example.orderservice.Service;
 
 import com.example.orderservice.DTO.OrderRequestDTO;
-import com.example.orderservice.DTO.OrderRequestItemDTO;
 import com.example.orderservice.Entity.OrderItemsEntity;
 import com.example.orderservice.Entity.OrdersEntity;
 import com.example.orderservice.Entity.OrdersStatus;
@@ -9,8 +8,6 @@ import com.example.orderservice.Repository.OrdersRepo;
 import com.example.orderservice.clients.InventoryOpenFeignClient;
 import com.example.orderservice.clients.ShippingFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,7 +29,6 @@ public class OrdersService {
     private final OrdersRepo ordersRepo;
     private final ModelMapper modelMapper;
     private final InventoryOpenFeignClient inventoryOpenFeignClient;
-    private final ShippingFeignClient shippingFeignClient;
 
     public List<OrderRequestDTO> getAllOrders(){
         log.info("fetching all orders");
