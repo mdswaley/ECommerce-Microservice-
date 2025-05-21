@@ -15,3 +15,10 @@ eureka:
   register-with-eureka: true
   fetch-registry: true
 
+
+resilience4j:
+  retry:
+    configs:
+      default:
+        maxRetryAttempts: 3
+        waitDuration: 100ms

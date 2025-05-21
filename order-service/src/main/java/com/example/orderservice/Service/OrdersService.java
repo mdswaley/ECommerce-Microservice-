@@ -8,6 +8,7 @@ import com.example.orderservice.Repository.OrdersRepo;
 import com.example.orderservice.clients.InventoryOpenFeignClient;
 import com.example.orderservice.clients.ShippingFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -84,8 +85,7 @@ public class OrdersService {
         return true;
     }
 
-
-    @Transactional
+    @Retry(name = "shippingOrderRetry", fallbackMethod = "placeOrderFallback")
     public String placeOrder(Long orderId) {
         OrdersEntity order = ordersRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
@@ -98,5 +98,9 @@ public class OrdersService {
         ordersRepo.save(order);
 
         return "Order placed successfully with id : "+orderId;
+    }
+
+    public void placeOrderFallback(Throwable throwable){
+        log.error("fallback occurred due to some issue : {}", throwable.getMessage());
     }
 }
