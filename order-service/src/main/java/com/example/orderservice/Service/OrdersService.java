@@ -6,15 +6,12 @@ import com.example.orderservice.Entity.OrdersEntity;
 import com.example.orderservice.Entity.OrdersStatus;
 import com.example.orderservice.Repository.OrdersRepo;
 import com.example.orderservice.clients.InventoryOpenFeignClient;
-import com.example.orderservice.clients.ShippingFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
