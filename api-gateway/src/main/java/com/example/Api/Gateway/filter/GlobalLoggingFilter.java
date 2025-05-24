@@ -15,8 +15,10 @@ public class GlobalLoggingFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("Logging from global {}",exchange.getRequest().getURI());
-        return chain.filter(exchange);
+        log.info("Logging from global pre {}",exchange.getRequest().getURI());
+        return chain.filter(exchange).then(Mono.fromRunnable(()->{
+            log.info("Logging from global post: {}",exchange.getResponse().getStatusCode());
+        }));
     }
 
     @Override
