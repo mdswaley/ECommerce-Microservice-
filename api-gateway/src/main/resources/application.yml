@@ -15,6 +15,9 @@ spring:
 #            - RedirectTo=302, https://codingshuttle.com
 #            add custom logging filter
             - name: LoggingOrdersFilter
+            - name: Authentication
+              args:
+                isEnabled: true
 
         - id: inventory-service
           uri: lb://INVENTORY-SERVICE
