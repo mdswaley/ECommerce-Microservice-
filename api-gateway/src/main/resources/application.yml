@@ -1,3 +1,6 @@
+jwt:
+  secreteKey: lkjsegnosher93847bdvk34y9jvnli3ehfrhdiofhosdnbldslfghosjvosdbvbnsld8749jsjfb
+
 spring:
   application:
     name: api-gateway
