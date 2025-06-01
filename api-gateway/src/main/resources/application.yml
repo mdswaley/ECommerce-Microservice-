@@ -1,5 +1,6 @@
 jwt:
-  secreteKey: lkjsegnosher93847bdvk34y9jvnli3ehfrhdiofhosdnbldslfghosjvosdbvbnsld8749jsjfb
+  secretKey: jfsio4utr934u934r7hdeiuyr493eryhdjvei47yrehhre9yriuy
+
 
 spring:
   application:
@@ -29,6 +30,7 @@ spring:
           filters:
             - StripPrefix=2
             - AddRequestHeader=X-Custom-Header, MD
+            - name: Authentication
 
         - id: shipping-service
           uri: lb://SHIPPING-SERVICE
@@ -36,6 +38,7 @@ spring:
             - Path=/api/v1/shipping/**
           filters:
             - StripPrefix=2
+
 
 
 
