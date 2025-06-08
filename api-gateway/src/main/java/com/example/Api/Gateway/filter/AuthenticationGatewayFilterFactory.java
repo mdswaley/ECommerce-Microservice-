@@ -24,6 +24,8 @@ public class AuthenticationGatewayFilterFactory extends AbstractGatewayFilterFac
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
 
+            if(!config.isEnabled) return chain.filter(exchange);
+
             String authHeaders = exchange.getRequest().getHeaders().getFirst("Authorization");
 
             if (authHeaders == null) {

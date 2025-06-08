@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class JWTService {
@@ -32,13 +33,13 @@ public class JWTService {
 
     }
 
-    public String generateUserRoleFromToken(String token){
+    public List<String> generateUserRoleFromToken(String token){
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        return claims.get("role", String.class);
+        return claims.get("roles", List.class);
     }
 
 
